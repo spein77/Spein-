@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mama Samaki - Daftari la Biashara</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    :root { --primary: #1976D2; --success: #388E3C; --danger: #D32F2F; --bg: #f5f5f5; }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+    body { background: var(--bg); padding-bottom: 80px; }
+    .header { background: var(--primary); color: white; padding: 15px; text-align: center; position: sticky; top: 0; }
+    .header h1 { font-size: 22px; }
+    .date { font-size: 14px; opacity: 0.9; }
+    .container { padding: 15px; max-width: 600px; margin: 0 auto; }
+    .card { background: white; border-radius: 12px; padding: 18px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .card h3 { color: var(--primary); margin-bottom: 12px; font-size: 18px; }
+    .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+    .stat { background: #E3F2FD; padding: 15px; border-radius: 10px; text-align: center; }
+    .stat h4 { font-size: 24px; color: var(--primary); }
+    .stat p { font-size: 13px; color: #555; }
+    .stat.profit { background: #E8F5E9; }
+    .stat.profit h4 { color: var(--success); }
+    .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; }
+    .btn { width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-success { background: var(--success); color: white; }
+    .btn-danger { background: var(--danger); color: white; }
+    .list-item { background: #fafafa; padding: 12px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+    .list-item small { color: #666; display: block; }
+    .tabs { position: fixed; bottom: 0; left: 0; right: 0; background: white; display: flex; border-top: 1px solid #ddd; }
+    .tab { flex: 1; padding: 12px; text-align: center; color: #666; }
+    .tab.active { color: var(--primary); }
+    .tab i { display: block; font-size: 20px; margin-bottom: 3px; }
+    .hidden { display: none; }
+    .deni { border-left: 4px solid var(--danger); }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1><i class="fas fa-fish"></i> DAFTARI LA MAMA SAMAKI</h1>
+    <div class="date" id="leoDate"></div>
+  </div>
+
+  <div class="container">
+    <!-- UKURASA 1: MUHTASARI -->
+    <div id="pageMuhtasari">
+      <div class="stats">
+        <div class="stat"><h4 id="mauzoLeo">0</h4><p>Mauzo Leo TZS</p></div>
+        <div class="stat"><h4 id="gharamaLeo">0</h4><p>Gharama Leo TZS</p></div>
+        <div class="stat profit"><h4 id="faidaLeo">0</h4><p>Faida Leo TZS</p></div>
+        <div class="stat"><h4 id="madeniJumla">0</h4><p>Wateja Wanadai TZS</p></div>
+      </div>
+
+      <div class="card">
+        <h3><i class="fas fa-plus-circle"></i> Andika Mauzo Mapya</h3>
+        <div class="input-row">
+          <input type="text" id="jinaMteja" placeholder="Jina la Mteja">
+          <select id="ainaSamaki">
+            <option value="">Chagua Samaki</option>
+            <option>Sato</option>
+            <option>Sangara</option>
+            <option>Perege</option>
+            <option>Kambale</option>
+            <option>Dagaa</option>
+          </select>
+        </div>
+        <div class="input-row">
+          <input type="number" id="kilo" placeholder="Kilo" step="0.5">
+          <input type="number" id="beiKilo" placeholder="Bei kwa Kilo">
+        </div>
+        <div class="input-row">
+          <select id="malipo">
+            <option value="cash">Amelipa Cash</option>
+            <option value="deni">Ana Deni</option>
+          </select>
+          <input type="number" id="kiasiLipa" placeholder="Kiasi Kalipa" value="0">
+        </div>
+        <button class="btn btn-primary" onclick="wekaMauzo()"><i class="fas fa-save"></i> HIFADHI MAUZO</button>
+      </div>
+
+      <div class="card">
+        <h3><i class="fas fa-truck"></i> Andika Gharama</h3>
+        <div class="input-row">
+          <select id="ainaGharama">
+            <option value="Mkoko">Gari la Mkoko</option>
+            <option value="Barafu">Barafu</option>
+            <option value="Kodi">Kodi ya Soko</option>
+            <option value="Nyingine">Nyingine</option>
+          </select>
+          <input type="number" id="kiasiGharama" placeholder="Kiasi TZS">
+        </div>
+        <button class="btn btn-danger" onclick="wekaGharama()"><i class="fas fa-minus-circle"></i> HIFADHI GHARAMA</button>
+      </div>
+    </div>
+
+    <!-- UKURASA 2: MAUZO -->
+    <div id="pageMauzo" class="hidden">
+      <div class="card">
+        <h3><i class="fas fa-list"></i> Mauzo Yote ya Leo</h3>
+        <div id="listMauzo"></div>
+      </div>
+    </div>
+
+    <!-- UKURASA 3: MADENI -->
+    <div id="pageMadeni" class="hidden">
+      <div class="card">
+        <h3><i class="fas fa-hand-holding-usd"></i> Wateja Wanadai</h3>
+        <div id="listMadeni"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="showPage('Muhtasari')"><i class="fas fa-home"></i>Nyumbani</div>
+    <div class="tab" onclick="showPage('Mauzo')"><i class="fas fa-shopping-cart"></i>Mauzo</div>
+    <div class="tab" onclick="showPage('Madeni')"><i class="fas fa-book"></i>Madeni</div>
+  </div>
+
+  <script>
+    let data = JSON.parse(localStorage.getItem('mamaSamaki')) || { mauzo: [], gharama: [] };
+    
+    document.getElementById('leoDate').textContent = new Date().toLocaleDateString('sw-TZ', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+    function saveData() {
+      localStorage.setItem('mamaSamaki', JSON.stringify(data));
+      hesabuMuhtasari();
+      onyeshaMauzo();
+      onyeshaMadeni();
+    }
+
+    function wekaMauzo() {
+      const jina = document.getElementById('jinaMteja').value.trim();
+      const aina = document.getElementById('ainaSamaki').value;
+      const kilo = parseFloat(document.getElementById('kilo').value);
+      const bei = parseFloat(document.getElementById('beiKilo').value);
+      const malipo = document.getElementById('malipo').value;
+      const lipa = parseFloat(document.getElementById('kiasiLipa').value) || 0;
+      
+      if (!jina || !aina || !kilo || !bei) return alert('Jaza sehemu zote muhimu');
+      
+      const jumla = kilo * bei;
+      const deni = malipo === 'deni' ? jumla - lipa : 0;
+      
+      data.mauzo.push({ 
+        id: Date.now(), jina, aina, kilo, bei, jumla, 
+        malipo, lipa, deni, muda: new Date().toLocaleTimeString('sw-TZ', {hour:'2-digit',minute:'2-digit'})
+      });
+      
+      document.getElementById('jinaMteja').value = '';
+      document.getElementById('kilo').value = '';
+      document.getElementById('beiKilo').value = '';
+      document.getElementById('kiasiLipa').value = '0';
+      saveData();
+      alert('Mauzo yamehifadhiwa!');
+    }
+
+    function wekaGharama() {
+      const aina = document.getElementById('ainaGharama').value;
+      const kiasi = parseFloat(document.getElementById('kiasiGharama').value);
+      if (!kiasi) return alert('Weka kiasi');
+      
+      data.gharama.push({ id: Date.now(), aina, kiasi, muda: new Date().toLocaleTimeString('sw-TZ', {hour:'2-digit',minute:'2-digit'}) });
+      document.getElementById('kiasiGharama').value = '';
+      saveData();
+      alert('Gharama imehifadhiwa!');
+    }
+
+    function hesabuMuhtasari() {
+      const mauzoLeo = data.mauzo.reduce((a,b) => a + b.jumla, 0);
+      const gharamaLeo = data.gharama.reduce((a,b) => a + b.kiasi, 0);
+      const madeniJumla = data.mauzo.reduce((a,b) => a + b.deni, 0);
+      
+      document.getElementById('mauzoLeo').textContent = mauzoLeo.toLocaleString();
+      document.getElementById('gharamaLeo').textContent = gharamaLeo.toLocaleString();
+      document.getElementById('faidaLeo').textContent = (mauzoLeo - gharamaLeo).toLocaleString();
+      document.getElementById('madeniJumla').textContent = madeniJumla.toLocaleString();
+    }
+
+    function onyeshaMauzo() {
+      document.getElementById('listMauzo').innerHTML = data.mauzo.length ? data.mauzo.map(m => `
+        <div class="list-item ${m.deni > 0 ? 'deni' : ''}">
+          <div>
+            <strong>${m.jina}</strong> - ${m.aina}
+            <small>${m.kilo}kg × ${m.bei.toLocaleString()} = TZS ${m.jumla.toLocaleString()} | ${m.muda}</small>
+            ${m.deni > 0 ? `<small style="color:var(--danger)">Deni: TZS ${m.deni.toLocaleString()}</small>` : '<small style="color:var(--success)">Amelipa</small>'}
+          </div>
+          <button onclick="futaMauzo(${m.id})" style="background:none;border:none;color:var(--danger);"><i class="fas fa-trash"></i></button>
+        </div>
+      `).join('') : '<p style="text-align:center;color:#666;">Hakuna mauzo bado</p>';
+    }
+
+    function onyeshaMadeni() {
+      const madeni = data.mauzo.filter(m => m.deni > 0);
+      document.getElementById('listMadeni').innerHTML = madeni.length ? madeni.map(m => `
+        <div class="list-item deni">
+          <div>
+            <strong>${m.jina}</strong>
+            <small>Anadai: TZS ${m.deni.toLocaleString()} | ${m.aina} ${m.kilo}kg</small>
+          </div>
+          <button class="btn btn-success" style="padding:8px 12px;font-size:13px;" onclick="lipaDeni(${m.id})">AMELIPA</button>
+        </div>
+      `).join('') : '<p style="text-align:center;color:#666;">Hakuna madeni 🎉</p>';
+    }
+
+    function futaMauzo(id) {
+      if (confirm('Futa mauzo haya?')) {
+        data.mauzo = data.mauzo.filter(m => m.id !== id);
+        saveData();
+      }
+    }
+
+    function lipaDeni(id) {
+      const mauzo = data.mauzo.find(m => m.id === id);
+      mauzo.deni = 0;
+      mauzo.malipo = 'cash';
+      saveData();
+      alert('Deni limefutwa!');
+    }
+
+    function showPage(page) {
+      document.querySelectorAll('[id^=page]').forEach(p => p.classList.add('hidden'));
+      document.getElementById('page' + page).classList.remove('hidden');
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+    }
+
+    // Weka alama ya malipo yakibadilika
+    document.getElementById('malipo').addEventListener('change', function() {
+      document.getElementById('kiasiLipa').style.display = this.value === 'deni' ? 'block' : 'none';
+    });
+
+    saveData(); // Pakia data ya mwanzo
+  </script>
+</body>
+</html>
