@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculator</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial; }
+    
+    body { 
+      background: #000; 
+      color: #fff; 
+      height: 100vh; 
+      display: flex; 
+      flex-direction: column; 
+    }
+    
+    .display { 
+      flex: 1; 
+      display: flex; 
+      align-items: flex-end; 
+      justify-content: flex-end; 
+      padding: 20px; 
+      font-size: 60px; 
+      font-weight: 300;
+      word-wrap: break-word;
+      word-break: break-all;
+    }
+    
+    .buttons { 
+      display: grid; 
+      grid-template-columns: repeat(4, 1fr); 
+      gap: 12px; 
+      padding: 20px; 
+    }
+    
+    button { 
+      height: 75px; 
+      border: none; 
+      border-radius: 50%; 
+      font-size: 28px; 
+      font-weight: 500;
+      cursor: pointer; 
+      background: #333; 
+      color: #fff;
+    }
+    
+    button:active { 
+      opacity: 0.7; 
+      transform: scale(0.95);
+    }
+    
+    .btn-op { background: #00a86b; } /* Green kama picha */
+    .btn-eq { background: #f59e0b; } /* Yellow kama picha */
+    .btn-c { background: #a5a5a5; color: #000; } /* Grey ya C */
+    .btn-zero { 
+      grid-column: span 1; 
+      border-radius: 50%; 
+    }
+  </style>
+</head>
+<body>
+
+  <div class="display" id="display">0</div>
+
+  <div class="buttons">
+    <button class="btn-c" onclick="clearAll()">C</button>
+    <button class="btn-c" onclick="backspace()">⌫</button>
+    <button class="btn-c" onclick="append('%')">%</button>
+    <button class="btn-op" onclick="append('÷')">÷</button>
+    
+    <button onclick="append('7')">7</button>
+    <button onclick="append('8')">8</button>
+    <button onclick="append('9')">9</button>
+    <button class="btn-op" onclick="append('×')">×</button>
+    
+    <button onclick="append('4')">4</button>
+    <button onclick="append('5')">5</button>
+    <button onclick="append('6')">6</button>
+    <button class="btn-op" onclick="append('-')">−</button>
+    
+    <button onclick="append('1')">1</button>
+    <button onclick="append('2')">2</button>
+    <button onclick="append('3')">3</button>
+    <button class="btn-op" onclick="append('+')">+</button>
+    
+    <button onclick="append('(')">(</button>
+    <button onclick="append('0')">0</button>
+    <button onclick="append('.')">.</button>
+    <button class="btn-eq" onclick="calculate()">=</button>
+  </div>
+
+  <script>
+    // 1. TENGENEZA KISANDUKU CHA KUHIFADHI HESABU
+    let expression = "";
+    let display = document.getElementById("display");
+    
+    // 2. SHUGHULI YA KUONGEZA NAMBA/KITU KWENYE SCREEN
+    function append(value) {
+      // Kama screen ina 0 tu, futa kwanza
+      if (expression === "0" && value !== ".") {
+        expression = "";
+      }
+      expression = expression + value;
+      display.innerText = expression;
+    }
+    
+    // 3. SHUGHULI YA KUFUTA YOTE
+    function clearAll() {
+      expression = "0";
+      display.innerText = expression;
+    }
+    
+    // 4. SHUGHULI YA KUFUTA MOJA MOJA
+    function backspace() {
+      expression = expression.slice(0, -1); // Kata herufi ya mwisho
+      if (expression === "") expression = "0";
+      display.innerText = expression;
+    }
+    
+    // 5. SHUGHULI YA KUHESABU
+    function calculate() {
+      try {
+        // Badilisha alama za hesabu ziwe za JavaScript
+        let result = expression
+          .replace(/×/g, "*") // Badilisha × iwe *
+          .replace(/÷/g, "/") // Badilisha ÷ iwe /
+          .replace(/%/g, "/100"); // Badilisha % iwe /100
+        
+        // Hesabu kwa eval()
+        let answer = eval(result);
+        
+        // Onyesha jibu
+        display.innerText = answer;
+        expression = answer.toString(); // Hifadhi jibu ili uendelee kuhesabu
+      } catch (error) {
+        display.innerText = "Error";
+        expression = "0";
+      }
+    }
+  </script>
+
+</body>
+</html>
